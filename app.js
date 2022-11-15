@@ -1,4 +1,4 @@
-import { POKE_API_BASE_URL } from "./js/constants.js";
+import { POKE_API_BASE_URL, pokeColors } from "./js/constants.js";
 import { generateRandomNumbersArray } from "./js/utils.js";
 import { gameSelector } from "./js/selectors.js";
 
@@ -28,10 +28,23 @@ const displayPokemon = (pokemon) => {
 
   gameSelector.innerHTML = pokemon
     .map((pokemon) => {
+      const type = pokemon.types[0].type.name ?? "normal";
+      const color = pokeColors[type];
+
       return `
-      <div class="card">
-          <h2>${pokemon.name}</h2>
-      </div>
+      <article class="card" style="background-color: ${color}">
+          <div class="card__front"></div>
+          
+          <div 
+              class="card__back rotated" 
+              style="background-color: ${color}"
+          >
+            <h2>${pokemon.name}</h2> 
+            
+            <img src="${pokemon.sprites.front_default}" 
+                 alt="${pokemon.name}" />  
+          </div>
+      </article>
     `;
     })
     .join("");
