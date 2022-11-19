@@ -32,22 +32,73 @@ const displayPokemon = (pokemon) => {
       const color = pokeColors[type];
 
       return `
-      <article class="card" style="background-color: ${color}">
-          <div class="card__front"></div>
-          
-          <div 
+          <article 
+            class="card" 
+            style="background-color: ${color}"
+            id="${pokemon.name}"
+            data-pokename="${pokemon.name}"
+          >
+            <div class="card__front"></div>
+              
+            <div 
               class="card__back rotated" 
               style="background-color: ${color}"
-          >
-            <h2>${pokemon.name}</h2> 
-            
-            <img src="${pokemon.sprites.front_default}" 
-                 alt="${pokemon.name}" />  
-          </div>
-      </article>
-    `;
+            >
+              <h2>${pokemon.name}</h2> 
+                    
+              <img 
+                src="${pokemon.sprites.front_default}" 
+                alt="${pokemon.name}" 
+              />  
+            </div>
+          </article>
+      `;
     })
     .join("");
+};
+
+/**
+ * Gets the HTML element reference and toggles the
+ * animation class when the user clicks on it.
+ *
+ * @param { Event } e
+ * @returns { void }
+ */
+const onCardClick = (e) => {
+  const card = e.currentTarget;
+  const [front, back] = getFrontAndBackFromCard(card);
+
+  if (front.classList.contains("rotated")) return;
+
+  front.classList.toggle("rotated");
+  back.classList.toggle("rotated");
+};
+
+/**
+ * Iterates over the queried DOM elements and adds the
+ * click event listener to each one of them.
+ *
+ * @returns { void }
+ */
+const addClickListeners = () => {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card.addEventListener("click", onCardClick);
+  });
+};
+
+/**
+ * Gets the card's front and back elements references
+ * and returns them.
+ *
+ * @param { HTMLElement } cardElement - The '.card' element reference.
+ * @returns { Array<Element> }
+ */
+const getFrontAndBackFromCard = (cardElement) => {
+  const front = cardElement.querySelector(".card__front");
+  const back = cardElement.querySelector(".card__back");
+
+  return [front, back];
 };
 
 /**
@@ -57,7 +108,10 @@ const displayPokemon = (pokemon) => {
  */
 const resetGame = async () => {
   const pokemon = await loadPokemon();
-  displayPokemon([...pokemon, ...pokemon]);
+  const duplicatedPokemonList = [...pokemon, ...pokemon];
+
+  displayPokemon(duplicatedPokemonList);
+  addClickListeners();
 };
 
 resetGame();

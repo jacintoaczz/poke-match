@@ -42,16 +42,17 @@
 
 .card__front,
 .card__back {
-  height: 100%;
-  width: 100%;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
 
+  height: 100%;
+  width: 100%;
+
   backface-visibility: hidden;
+  transition: transform 0.5s;
 }
 
 .card__front {
